@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hypnotic Ops | Systems that remove friction</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg">
+    <div class="grain"></div>
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="grid"></div>
+  </div>
+
+  <header class="header" id="top">
+    <div class="container header__inner">
+      <a class="brand" href="#top">
+        <span class="brand__mark">H777</span>
+        <span class="brand__text">Hypnotic Ops</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a class="nav__link" href="#systems">Systems</a>
+        <a class="nav__link" href="#projects">Projects</a>
+        <a class="nav__link" href="#log">Command Log</a>
+        <a class="nav__link" href="#contact">Contact</a>
+      </nav>
+
+      <div class="header__actions">
+        <button class="btn btn--ghost" id="themeBtn" type="button" aria-label="Toggle theme">
+          <span id="themeIcon">☾</span>
+        </button>
+        <button class="btn btn--primary" id="ctaBtn" type="button">Start a Build</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__copy">
+          <p class="pill">
+            <span class="dot"></span>
+            Ops + Dev • Systems Thinking • Automation
+          </p>
+          <h1>
+            Build <span class="glow">beautiful systems</span> that remove friction.
+          </h1>
+          <p class="sub">
+            A mini site to practice real-world HTML/CSS/JS: UI state, rendering, filtering,
+            animations, storage, and clean design.
+          </p>
+
+          <div class="hero__buttons">
+            <a class="btn btn--primary" href="#projects">See Projects</a>
+            <a class="btn btn--ghost" href="#log">Open Command Log</a>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="stat__num" data-count="255">0</div>
+              <div class="stat__label">doors managed</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num" data-count="9">0</div>
+              <div class="stat__label">cuatrimestres</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num" data-count="777">0</div>
+              <div class="stat__label">hypnotic energy</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__card" aria-label="Interactive preview card">
+          <div class="glass">
+            <div class="glass__top">
+              <div class="chips">
+                <span class="chip">UI</span>
+                <span class="chip">State</span>
+                <span class="chip">Rules</span>
+                <span class="chip">Data</span>
+              </div>
+              <div class="sparkline" id="sparkline"></div>
+            </div>
+
+            <div class="glass__body">
+              <h3>System Pulse</h3>
+              <p class="muted">Click nodes to simulate “work flowing.”</p>
+
+              <div class="nodes" id="nodes">
+                <button class="node" data-node="Intake">Intake</button>
+                <button class="node" data-node="Triage">Triage</button>
+                <button class="node" data-node="Assign">Assign</button>
+                <button class="node" data-node="Execute">Execute</button>
+                <button class="node" data-node="Verify">Verify</button>
+                <button class="node" data-node="Close">Close</button>
+              </div>
+
+              <div class="pulse">
+                <div class="pulse__label">Active stage</div>
+                <div class="pulse__value" id="activeStage">Intake</div>
+              </div>
+
+              <div class="toast" id="toast" aria-live="polite"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="systems">
+      <div class="container">
+        <div class="section__head">
+          <h2>Systems that feel inevitable</h2>
+          <p class="muted">Clean cards, hover shine, and layout you can reuse in your portfolio.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card__icon">⚙️</div>
+            <h3>Workflow clarity</h3>
+            <p>RACI-ready flows with “if/then” logic and visible ownership.</p>
+          </article>
+
+          <article class="card">
+            <div class="card__icon">🧠</div>
+            <h3>Knowledge base</h3>
+            <p>SOPs that are searchable, modular, and easy to train against.</p>
+          </article>
+
+          <article class="card">
+            <div class="card__icon">✨</div>
+            <h3>Delightful UI</h3>
+            <p>Animations that are subtle, purposeful, and fast.</p>
+          </article>
+
+          <article class="card">
+            <div class="card__icon">📈</div>
+            <h3>Metrics & proof</h3>
+            <p>Track outcomes, show receipts, and build trust with data.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section__head split">
+          <div>
+            <h2>Projects</h2>
+            <p class="muted">Rendered from JS. Filter by tags. Add your own cards easily.</p>
+          </div>
+
+          <div class="filters">
+            <button class="filter is-active" data-filter="all">All</button>
+            <button class="filter" data-filter="ops">Ops</button>
+            <button class="filter" data-filter="automation">Automation</button>
+            <button class="filter" data-filter="frontend">Frontend</button>
+          </div>
+        </div>
+
+        <div class="projectGrid" id="projectGrid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="section" id="log">
+      <div class="container">
+        <div class="section__head">
+          <h2>Command Log</h2>
+          <p class="muted">A tiny journaling widget with localStorage + export.</p>
+        </div>
+
+        <div class="log">
+          <form class="log__form" id="logForm">
+            <label class="field">
+              <span>Top priority</span>
+              <input id="priority" type="text" placeholder="What must be true by end of day?" maxlength="80" />
+            </label>
+
+            <label class="field">
+              <span>Biggest challenge</span>
+              <input id="challenge" type="text" placeholder="What’s blocking momentum?" maxlength="80" />
+            </label>
+
+            <label class="field">
+              <span>Key insight</span>
+              <input id="insight" type="text" placeholder="What did you realize today?" maxlength="120" />
+            </label>
+
+            <label class="field">
+              <span>Who did you serve?</span>
+              <input id="served" type="text" placeholder="Client, family, team..." maxlength="80" />
+            </label>
+
+            <div class="log__actions">
+              <button class="btn btn--primary" type="submit">Save entry</button>
+              <button class="btn btn--ghost" id="exportBtn" type="button">Export JSON</button>
+              <button class="btn btn--danger" id="clearBtn" type="button">Clear</button>
+            </div>
+          </form>
+
+          <div class="log__list">
+            <div class="log__listHead">
+              <h3>Recent entries</h3>
+              <span class="muted" id="entryCount">0 entries</span>
+            </div>
+            <div id="entries"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="contact">
+          <div>
+            <h2>Contact</h2>
+            <p class="muted">
+              This button is a placeholder for your future form handling (Netlify / Formspree / serverless).
+            </p>
+          </div>
+
+          <div class="contact__box">
+            <label class="field">
+              <span>Email</span>
+              <input id="email" type="email" placeholder="you@example.com" />
+            </label>
+            <button class="btn btn--primary" id="fakeSubmit" type="button">Send</button>
+            <p class="tiny muted">No backend yet — we’re just practicing UI + state.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <p class="muted">© <span id="year"></span> Hypnotic Ops • Built for practice</p>
+        <a class="muted" href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
+
+</html>

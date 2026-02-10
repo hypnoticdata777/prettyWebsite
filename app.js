@@ -10,12 +10,24 @@ const state = {
   activeStage: "Intake",
   filter: "all",
   projects: [
-        {
-          title: "TurnFlow™",
-          desc: "Turn & maintenance estimate → tasks → proof → receipts. Built for clarity and trust.",
-          tags: ["ops", "frontend"],
-          updated: "2026-02-05",
-          difficulty: "medium"
-        }
-      ]
-    };
+{
+  title: "TurnFlow™",
+  desc: "Turn & maintenance estimate → tasks → proof → receipts. Built for clarity and trust.",
+  tags: ["ops", "frontend"],
+  updated: "2026-02-05",
+  difficulty: "medium"
+},
+{
+    title: "RentPulse™",
+desc: "Owner-facing delinquency updates with consistent narrative + next actions.",
+tags: ["ops", "automation"],
+updated: "2026-02-02",
+difficulty: "medium"
+},
+{
+title: "InboxPilot™",
+desc: "Sorts urgent emails, flags risk, and schedules focus blocks.",
+tags: ["automation", "ops"],
+updated: "2026-01-29",
+difficulty: "hard"
+};

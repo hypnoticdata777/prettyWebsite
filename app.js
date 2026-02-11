@@ -30,4 +30,28 @@ desc: "Sorts urgent emails, flags risk, and schedules focus blocks.",
 tags: ["automation", "ops"],
 updated: "2026-01-29",
 difficulty: "hard"
+},
+{
+title: "Budget Sage Tracker",
+desc: "Local-first expense tracker with edit/delete + persistence + charts next.",
+tags: ["frontend"],
+updated: "2026-01-31",
+difficulty: "easy"
+},
+{
+title: "Daily War Room Logger",
+desc: "Minimal-friction daily logging tool with timestamps + auto-save.",
+tags: ["frontend", "automation"],
+updated: "2026-02-01",
+difficulty: "easy"
+},
+{
+title: "Ops SOP Index",
+desc: "A searchable SOP shell with “UI / State / Rules / Data” buckets.",
+tags: ["ops"],
+updated: "2026-02-03",
+difficulty: "easy"
+}
+],
+entries: []
 };

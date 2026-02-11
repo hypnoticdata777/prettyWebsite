@@ -55,3 +55,23 @@ difficulty: "easy"
 ],
 entries: []
 };
+function initYear() {
+$("#year").textContent = new Date().getFullYear();
+}
+function initTheme() {
+const saved = localStorage.getItem(STORAGE_KEYS.theme);
+if (saved === "light") document.documentElement.setAttribute("data-theme", "light");
+updateThemeIcon();
+$("#themeBtn").addEventListener("click", () => {
+const isLight = document.documentElement.getAttribute("data-theme") === "light";
+if (isLight) {
+document.documentElement.removeAttribute("data-theme");
+localStorage.setItem(STORAGE_KEYS.theme, "dark");
+} else {
+document.documentElement.setAttribute("data-theme", "light");
+localStorage.setItem(STORAGE_KEYS.theme, "light");
+}
+updateThemeIcon();
+toast("Theme updated.");
+});
+}

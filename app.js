@@ -75,3 +75,7 @@ updateThemeIcon();
 toast("Theme updated.");
 });
 }
+function updateThemeIcon() {
+const isLight = document.documentElement.getAttribute("data-theme") === "light";
+$("#themeIcon").textContent = isLight ? "☀" : "☾";
+}

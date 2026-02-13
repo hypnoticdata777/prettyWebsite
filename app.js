@@ -88,3 +88,6 @@ const el = $(id);
 el.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 });
+$("#ctaBtn").addEventListener("click", () => {
+$("#projects").scrollIntoView({ behavior: "smooth" });
+});

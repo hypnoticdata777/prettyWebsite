@@ -79,3 +79,12 @@ function updateThemeIcon() {
 const isLight = document.documentElement.getAttribute("data-theme") === "light";
 $("#themeIcon").textContent = isLight ? "☀" : "☾";
 }
+function initSmoothScroll() {
+$$(".nav__link").forEach(a => {
+a.addEventListener("click", (e) => {
+e.preventDefault();
+const id = a.getAttribute("href");
+const el = $(id);
+el.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+});

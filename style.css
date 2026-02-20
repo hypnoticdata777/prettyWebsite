@@ -379,9 +379,14 @@ h1{
   min-height: 20px;
   font-size: 13px;
   color: var(--muted);
+  transition: opacity .25s ease, transform .25s ease;
+  transform: translateY(4px);
+  opacity: 0;
 }
 .toast.is-show{
   color: var(--text);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .section{
@@ -642,3 +647,94 @@ input:focus{
 @media (min-width: 860px){
   .nav{ display:flex; }
 }
+
+/* ─── Scroll-reveal ──────────────────────────────────────────────────────── */
+.reveal{
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity .55s cubic-bezier(.22,1,.36,1) calc(var(--i, 0) * 90ms),
+    transform .55s cubic-bezier(.22,1,.36,1) calc(var(--i, 0) * 90ms);
+}
+.reveal.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Animated gradient border on primary CTA ───────────────────────────── */
+.btn--primary{
+  position: relative;
+  z-index: 0;
+  border-color: transparent;
+  background: linear-gradient(90deg,
+    color-mix(in oklab, var(--a) 65%, transparent),
+    color-mix(in oklab, var(--b) 55%, transparent));
+}
+.btn--primary::after{
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    var(--a), var(--b), var(--c), var(--a)
+  );
+  z-index: -1;
+  animation: spin-border 3s linear infinite;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.btn--primary:hover::after{
+  opacity: 1;
+}
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes spin-border {
+  to { --angle: 360deg; }
+}
+
+/* ─── Project card hover glow (mirrors .card) ───────────────────────────── */
+.project::before{
+  content:"";
+  position:absolute;
+  inset: -60px;
+  background: radial-gradient(circle at var(--x, 30%) var(--y, 20%), color-mix(in oklab, var(--a) 22%, transparent), transparent 55%);
+  opacity: 0;
+  transition: opacity .25s ease;
+  pointer-events: none;
+}
+.project:hover::before{
+  opacity: 1;
+}
+
+/* ─── Focus-visible (keyboard nav) ──────────────────────────────────────── */
+:focus-visible{
+  outline: 2px solid color-mix(in oklab, var(--b) 70%, transparent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.btn:focus-visible,
+.node:focus-visible,
+.filter:focus-visible{
+  outline: 2px solid color-mix(in oklab, var(--b) 70%, transparent);
+  outline-offset: 3px;
+}
+
+/* ─── Prefers-reduced-motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce){
+  *{
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .reveal{
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ─── Project mousemove glow setup ──────────────────────────────────────── */
+.project{ cursor: default; }

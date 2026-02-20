@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hypnotic Ops | Systems that remove friction</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <div class="bg">
@@ -40,7 +40,7 @@
   <main>
     <section class="hero">
       <div class="container hero__inner">
-        <div class="hero__copy">
+        <div class="hero__copy reveal" style="--i:0">
           <p class="pill">
             <span class="dot"></span>
             Ops + Dev • Systems Thinking • Automation
@@ -74,7 +74,7 @@
           </div>
         </div>
 
-        <div class="hero__card" aria-label="Interactive preview card">
+        <div class="hero__card reveal" style="--i:1" aria-label="Interactive preview card">
           <div class="glass">
             <div class="glass__top">
               <div class="chips">
@@ -113,32 +113,32 @@
 
     <section class="section" id="systems">
       <div class="container">
-        <div class="section__head">
+        <div class="section__head reveal" style="--i:0">
           <h2>Systems that feel inevitable</h2>
           <p class="muted">Clean cards, hover shine, and layout you can reuse in your portfolio.</p>
         </div>
 
-        <div class="cards">
-          <article class="card">
-            <div class="card__icon">⚙️</div>
+        <div class=”cards”>
+          <article class=”card reveal” style=”--i:0”>
+            <div class=”card__icon”>⚙️</div>
             <h3>Workflow clarity</h3>
             <p>RACI-ready flows with “if/then” logic and visible ownership.</p>
           </article>
 
-          <article class="card">
-            <div class="card__icon">🧠</div>
+          <article class=”card reveal” style=”--i:1”>
+            <div class=”card__icon”>🧠</div>
             <h3>Knowledge base</h3>
             <p>SOPs that are searchable, modular, and easy to train against.</p>
           </article>
 
-          <article class="card">
-            <div class="card__icon">✨</div>
+          <article class=”card reveal” style=”--i:2”>
+            <div class=”card__icon”>✨</div>
             <h3>Delightful UI</h3>
             <p>Animations that are subtle, purposeful, and fast.</p>
           </article>
 
-          <article class="card">
-            <div class="card__icon">📈</div>
+          <article class=”card reveal” style=”--i:3”>
+            <div class=”card__icon”>📈</div>
             <h3>Metrics & proof</h3>
             <p>Track outcomes, show receipts, and build trust with data.</p>
           </article>
@@ -148,7 +148,7 @@
 
     <section class="section" id="projects">
       <div class="container">
-        <div class="section__head split">
+        <div class="section__head split reveal" style="--i:0">
           <div>
             <h2>Projects</h2>
             <p class="muted">Rendered from JS. Filter by tags. Add your own cards easily.</p>
@@ -162,18 +162,18 @@
           </div>
         </div>
 
-        <div class="projectGrid" id="projectGrid" aria-live="polite"></div>
+        <div class="projectGrid reveal" style="--i:1" id="projectGrid" aria-live="polite"></div>
       </div>
     </section>
 
     <section class="section" id="log">
       <div class="container">
-        <div class="section__head">
+        <div class="section__head reveal" style="--i:0">
           <h2>Command Log</h2>
           <p class="muted">A tiny journaling widget with localStorage + export.</p>
         </div>
 
-        <div class="log">
+        <div class="log reveal" style="--i:1">
           <form class="log__form" id="logForm">
             <label class="field">
               <span>Top priority</span>
@@ -215,7 +215,7 @@
 
     <section class="section" id="contact">
       <div class="container">
-        <div class="contact">
+        <div class="contact reveal" style="--i:0">
           <div>
             <h2>Contact</h2>
             <p class="muted">
@@ -245,6 +245,4 @@
 
   <script src="./app.js"></script>
 </body>
-</html>
-
 </html>

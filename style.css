@@ -413,6 +413,20 @@ h1{
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
 }
+.card,
+.project,
+.log__form,
+.log__list,
+.contact__box,
+.hero__card .glass,
+.stat {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, white 4%, var(--panel)) 0%,
+      color-mix(in oklab, white 1%, var(--panel)) 100%
+    );
+}
 .card{
   border: 1px solid var(--stroke);
   background: var(--panel);

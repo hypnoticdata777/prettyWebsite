@@ -3,12 +3,20 @@ const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
 /* ─── Storage keys ─────────────────────────────────────────────────────────── */
-const KEYS = { theme: "h777_theme", entries: "h777_entries" };
+const KEYS = { theme: "h777_theme", entries: "h777_entries", filter: "h777_filter" };
+
+/* ─── Timing constants ──────────────────────────────────────────────────────── */
+const TIMING = {
+  TOAST_BASE:     1800,   // minimum toast display time (ms)
+  TOAST_PER_CHAR:   35,   // additional ms per character of message
+  TOAST_MAX:      4000,   // maximum toast display time (ms)
+  COUNTER_ANIM:   1200,   // stat counter animation duration (ms)
+};
 
 /* ─── State ────────────────────────────────────────────────────────────────── */
 const state = {
   activeStage: "Intake",
-  filter: "all",
+  filter: localStorage.getItem(KEYS.filter) || "all",
   projects: [
     {
       title: "TurnFlow™",
@@ -64,10 +72,15 @@ function toast(msg) {
   el.textContent = msg;
   el.classList.add("is-show");
   clearTimeout(toastTimer);
+  // Duration scales with message length so longer messages stay visible longer
+  const duration = Math.min(
+    TIMING.TOAST_BASE + msg.length * TIMING.TOAST_PER_CHAR,
+    TIMING.TOAST_MAX
+  );
   toastTimer = setTimeout(() => {
     el.classList.remove("is-show");
     el.textContent = "";
-  }, 2400);
+  }, duration);
 }
 
 /* ─── Year ─────────────────────────────────────────────────────────────────── */
@@ -85,7 +98,13 @@ function updateThemeIcon() {
 
 function initTheme() {
   const saved = localStorage.getItem(KEYS.theme);
-  if (saved === "light") document.documentElement.setAttribute("data-theme", "light");
+  if (saved) {
+    if (saved === "light") document.documentElement.setAttribute("data-theme", "light");
+  } else if (window.matchMedia?.("(prefers-color-scheme: light)").matches) {
+    // Respect system preference on first visit (no saved preference yet)
+    document.documentElement.setAttribute("data-theme", "light");
+    localStorage.setItem(KEYS.theme, "light");
+  }
   updateThemeIcon();
 
   $("#themeBtn")?.addEventListener("click", () => {
@@ -154,7 +173,7 @@ function initReveal() {
 }
 
 /* ─── Animated stat counters ───────────────────────────────────────────────── */
-function animateCounter(el, target, duration = 1200) {
+function animateCounter(el, target, duration = TIMING.COUNTER_ANIM) {
   const start = performance.now();
   const update = now => {
     const progress = Math.min((now - start) / duration, 1);
@@ -202,44 +221,90 @@ function initCardGlow() {
 /* ─── Projects ─────────────────────────────────────────────────────────────── */
 const DIFF_COLORS = { easy: "var(--b)", medium: "var(--c)", hard: "var(--a)" };
 
+function buildProjectCard(p, i) {
+  const article = document.createElement("article");
+  article.className = "project reveal is-visible";
+  article.style.setProperty("--i", i);
+
+  const top = document.createElement("div");
+  top.className = "project__top";
+
+  const title = document.createElement("h3");
+  title.className = "project__title";
+  title.textContent = p.title;
+
+  const badges = document.createElement("div");
+  badges.className = "badges";
+  p.tags.forEach(t => {
+    const span = document.createElement("span");
+    span.className = "badge";
+    span.textContent = t;
+    badges.appendChild(span);
+  });
+
+  top.appendChild(title);
+  top.appendChild(badges);
+
+  const desc = document.createElement("p");
+  desc.className = "project__desc";
+  desc.textContent = p.desc;
+
+  const meta = document.createElement("div");
+  meta.className = "project__meta";
+
+  const dateSpan = document.createElement("span");
+  dateSpan.textContent = p.updated;
+
+  const diffSpan = document.createElement("span");
+  diffSpan.textContent = p.difficulty;
+  diffSpan.style.color = DIFF_COLORS[p.difficulty] ?? "var(--muted)";
+
+  meta.appendChild(dateSpan);
+  meta.appendChild(diffSpan);
+
+  article.appendChild(top);
+  article.appendChild(desc);
+  article.appendChild(meta);
+
+  return article;
+}
+
 function renderProjects() {
   const grid = $("#projectGrid");
   if (!grid) return;
+
+  grid.textContent = "";
+
   const active = state.filter;
   const visible = active === "all"
     ? state.projects
     : state.projects.filter(p => p.tags.includes(active));
 
   if (!visible.length) {
-    grid.innerHTML = `<p class="muted" style="grid-column:1/-1;padding:24px 0">No projects match this filter.</p>`;
+    const p = document.createElement("p");
+    p.className = "muted";
+    p.style.cssText = "grid-column:1/-1;padding:24px 0";
+    p.textContent = "No projects match this filter.";
+    grid.appendChild(p);
     return;
   }
 
-  grid.innerHTML = visible.map((p, i) => `
-    <article class="project reveal is-visible" style="--i:${i}">
-      <div class="project__top">
-        <h3 class="project__title">${p.title}</h3>
-        <div class="badges">
-          ${p.tags.map(t => `<span class="badge">${t}</span>`).join("")}
-        </div>
-      </div>
-      <p class="project__desc">${p.desc}</p>
-      <div class="project__meta">
-        <span>${p.updated}</span>
-        <span style="color:${DIFF_COLORS[p.difficulty] ?? "var(--muted)"}">
-          ${p.difficulty}
-        </span>
-      </div>
-    </article>
-  `).join("");
+  visible.forEach((p, i) => grid.appendChild(buildProjectCard(p, i)));
 }
 
 function initFilters() {
+  // Apply saved filter state to button UI
   $$(".filter").forEach(btn => {
+    if (btn.dataset.filter === state.filter) {
+      $$(".filter").forEach(b => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+    }
+
     btn.addEventListener("click", () => {
       $$(".filter").forEach(b => b.classList.remove("is-active"));
       btn.classList.add("is-active");
       state.filter = btn.dataset.filter;
+      localStorage.setItem(KEYS.filter, state.filter);
       renderProjects();
     });
   });
@@ -247,12 +312,12 @@ function initFilters() {
 
 /* ─── System Pulse nodes ───────────────────────────────────────────────────── */
 const STAGE_MESSAGES = {
-  Intake:   "New ticket received. Routing now...",
-  Triage:   "Assessing urgency + impact.",
-  Assign:   "Owner identified. Handoff complete.",
-  Execute:  "Work in progress. Clock is ticking.",
-  Verify:   "Checking quality before close.",
-  Close:    "Done. Receipt filed. System clear."
+  Intake:  "New ticket received. Routing now...",
+  Triage:  "Assessing urgency + impact.",
+  Assign:  "Owner identified. Handoff complete.",
+  Execute: "Work in progress. Clock is ticking.",
+  Verify:  "Checking quality before close.",
+  Close:   "Done. Receipt filed. System clear."
 };
 
 function setActiveNode(name) {
@@ -271,6 +336,11 @@ function initNodes() {
 }
 
 /* ─── Command Log ──────────────────────────────────────────────────────────── */
+function genId() {
+  // Combines timestamp + random suffix to avoid same-millisecond collisions
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+}
+
 function loadEntries() {
   try {
     state.entries = JSON.parse(localStorage.getItem(KEYS.entries) || "[]");
@@ -283,6 +353,48 @@ function saveEntries() {
   localStorage.setItem(KEYS.entries, JSON.stringify(state.entries));
 }
 
+function buildEntryEl(e) {
+  const entry = document.createElement("div");
+  entry.className = "entry";
+
+  const top = document.createElement("div");
+  top.className = "entry__top";
+
+  const idSpan = document.createElement("span");
+  idSpan.textContent = `#${e.id}`;
+
+  const tsSpan = document.createElement("span");
+  tsSpan.textContent = e.ts;
+
+  top.appendChild(idSpan);
+  top.appendChild(tsSpan);
+
+  const grid = document.createElement("div");
+  grid.className = "entry__grid";
+
+  [
+    { key: "priority",  label: "Priority"  },
+    { key: "challenge", label: "Challenge" },
+    { key: "insight",   label: "Insight"   },
+    { key: "served",    label: "Served"    }
+  ].forEach(({ key, label }) => {
+    if (!e[key]) return;
+    const kv = document.createElement("div");
+    kv.className = "kv";
+    const b = document.createElement("b");
+    b.textContent = label;
+    const span = document.createElement("span");
+    span.textContent = e[key];
+    kv.appendChild(b);
+    kv.appendChild(span);
+    grid.appendChild(kv);
+  });
+
+  entry.appendChild(top);
+  entry.appendChild(grid);
+  return entry;
+}
+
 function renderEntries() {
   const container = $("#entries");
   const countEl = $("#entryCount");
@@ -290,25 +402,18 @@ function renderEntries() {
 
   if (countEl) countEl.textContent = `${state.entries.length} entr${state.entries.length === 1 ? "y" : "ies"}`;
 
+  container.textContent = "";
+
   if (!state.entries.length) {
-    container.innerHTML = `<p class="muted" style="font-size:13px">No entries yet. Fill the form and save.</p>`;
+    const p = document.createElement("p");
+    p.className = "muted";
+    p.style.fontSize = "13px";
+    p.textContent = "No entries yet. Fill the form and save.";
+    container.appendChild(p);
     return;
   }
 
-  container.innerHTML = state.entries.slice().reverse().map(e => `
-    <div class="entry">
-      <div class="entry__top">
-        <span>#${e.id}</span>
-        <span>${e.ts}</span>
-      </div>
-      <div class="entry__grid">
-        ${e.priority ? `<div class="kv"><b>Priority</b><span>${e.priority}</span></div>` : ""}
-        ${e.challenge ? `<div class="kv"><b>Challenge</b><span>${e.challenge}</span></div>` : ""}
-        ${e.insight ? `<div class="kv"><b>Insight</b><span>${e.insight}</span></div>` : ""}
-        ${e.served ? `<div class="kv"><b>Served</b><span>${e.served}</span></div>` : ""}
-      </div>
-    </div>
-  `).join("");
+  state.entries.slice().reverse().forEach(e => container.appendChild(buildEntryEl(e)));
 }
 
 function initLog() {
@@ -318,12 +423,12 @@ function initLog() {
   $("#logForm")?.addEventListener("submit", e => {
     e.preventDefault();
     const entry = {
-      id: Date.now(),
-      ts: new Date().toLocaleString(),
-      priority: $("#priority").value.trim(),
+      id:        genId(),
+      ts:        new Date().toLocaleString(),
+      priority:  $("#priority").value.trim(),
       challenge: $("#challenge").value.trim(),
-      insight: $("#insight").value.trim(),
-      served: $("#served").value.trim()
+      insight:   $("#insight").value.trim(),
+      served:    $("#served").value.trim()
     };
     if (!entry.priority && !entry.challenge && !entry.insight && !entry.served) {
       toast("Fill in at least one field.");

@@ -1,97 +1,266 @@
 <!doctype html>
+<!-- "doctype html" tells the browser: "this is a modern HTML5 page."
+     Without it, some browsers use an old quirks mode that breaks layouts. -->
+
 <html lang="en">
+<!-- <html> is the root element — every other tag lives inside it.
+     lang="en" tells screen-readers and search engines the page is in English. -->
+
 <head>
+  <!-- <head> holds invisible setup info — it doesn't appear on screen. -->
+
   <meta charset="UTF-8" />
+  <!-- charset="UTF-8" lets you safely use any character:
+       emojis, accented letters (é, ñ), symbols — without them turning into garbage. -->
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- On mobile phones, browsers would normally shrink the page to fit.
+       This tag tells them: "make 1 CSS pixel = 1 screen pixel" so the site looks good on phones.
+       initial-scale=1.0 means "don't zoom in or out on load." -->
+
   <title>Hypnotic Ops | Systems that remove friction</title>
+  <!-- The text shown on the browser tab and in Google search results. -->
+
   <link rel="stylesheet" href="./style.css" />
+  <!-- Loads the CSS file. rel="stylesheet" = "this is a stylesheet".
+       href="./style.css" = "look for the file in the same folder as this HTML file."
+       The dot (.) means "current directory." -->
+
 </head>
+
 <body>
+  <!-- Everything inside <body> is what you actually SEE in the browser. -->
+
+  <!-- ═══════════════════════════════════════════════════════
+       BACKGROUND LAYER
+       These divs create the decorative background that sits
+       behind all page content. They are positioned with CSS
+       so they never scroll away (position: fixed).
+  ═══════════════════════════════════════════════════════ -->
   <div class="bg">
+    <!-- .bg is the full-screen fixed container for all background effects. -->
+
     <div class="grain"></div>
+    <!-- Creates a subtle film-grain texture (noise/static look).
+         The texture is drawn with an SVG inside the CSS background-image.
+         It slowly drifts/rotates to feel alive. -->
+
     <div class="orb orb-a"></div>
+    <!-- A large blurry glowing blob, top-left area.
+         Purple-to-cyan color. Floats up and down using CSS animation. -->
+
     <div class="orb orb-b"></div>
+    <!-- A second glowing blob, bottom-right area.
+         Orange-to-purple color. Starts its float animation 2.5s behind orb-a
+         so they move out of sync (feels more natural). -->
+
     <div class="grid"></div>
+    <!-- A faint grid of horizontal + vertical lines covering the whole page.
+         Made entirely in CSS using repeating linear gradients — no image file needed. -->
   </div>
 
+
+  <!-- ═══════════════════════════════════════════════════════
+       HEADER / NAVIGATION BAR
+       Sticks to the top of the screen while you scroll.
+       id="top" lets the "Back to top ↑" link in the footer jump here.
+  ═══════════════════════════════════════════════════════ -->
   <header class="header" id="top">
+
     <div class="container header__inner">
+      <!-- .container centers everything and caps the max width.
+           .header__inner uses flexbox to spread logo, nav, and buttons
+           across the bar with space between them. -->
+
+      <!-- LOGO / BRAND -->
       <a class="brand" href="#top">
+        <!-- Clicking this scrolls back to the top of the page (#top = the id above).
+             <a> is an anchor — the most basic clickable link in HTML. -->
+
         <span class="brand__mark">H777</span>
+        <!-- A small pill-shaped monospace badge. The "mark" / logo symbol. -->
+
         <span class="brand__text">Hypnotic Ops</span>
+        <!-- The full brand name next to the badge. -->
       </a>
 
+      <!-- NAVIGATION LINKS -->
       <nav class="nav" aria-label="Primary">
+        <!-- <nav> semantically marks this as a navigation region.
+             aria-label="Primary" helps screen-readers describe it as the main menu.
+             On small screens (.nav has display:none), this is hidden.
+             On wide screens (≥860px) it becomes display:flex — see CSS media query. -->
+
         <a class="nav__link" href="#systems">Systems</a>
+        <!-- href="#systems" scrolls to the element with id="systems" on the page.
+             JavaScript adds the class "is-active" to the current section's link
+             as you scroll, highlighting it with a gradient background. -->
+
         <a class="nav__link" href="#projects">Projects</a>
         <a class="nav__link" href="#log">Command Log</a>
         <a class="nav__link" href="#contact">Contact</a>
       </nav>
 
+      <!-- HEADER ACTION BUTTONS -->
       <div class="header__actions">
+        <!-- A flex row holding the two buttons on the right side of the header. -->
+
         <button class="btn btn--ghost" id="themeBtn" type="button" aria-label="Toggle theme">
+          <!-- btn = base button styles. btn--ghost = transparent background variant.
+               id="themeBtn" lets JavaScript find this button.
+               type="button" prevents it from accidentally submitting a form.
+               aria-label describes the button to screen-readers (they can't see the icon). -->
           <span id="themeIcon">☾</span>
+          <!-- The moon icon (☾). JavaScript swaps it for ☀ in light mode. -->
         </button>
+
         <button class="btn btn--primary" id="ctaBtn" type="button">Start a Build</button>
+        <!-- btn--primary = purple-to-cyan gradient background.
+             Clicking this scrolls down to the #projects section (wired up in app.js). -->
       </div>
     </div>
   </header>
 
+
+  <!-- ═══════════════════════════════════════════════════════
+       MAIN CONTENT
+       <main> wraps all the primary page content.
+       Screen-readers can jump straight here, skipping the header.
+  ═══════════════════════════════════════════════════════ -->
   <main>
+
+    <!-- ───────────────────────────────────────────────────
+         HERO SECTION  (the big "above the fold" intro)
+    ─────────────────────────────────────────────────────── -->
     <section class="hero">
+      <!-- <section> groups related content. No id needed here since
+           it's the very top — the header's brand link already points to #top. -->
+
       <div class="container hero__inner">
+        <!-- hero__inner is a CSS Grid with two columns:
+             left column (1.15fr) = text + stats
+             right column (0.85fr) = interactive glass card
+             "fr" = fraction unit — they divide available space proportionally. -->
+
+        <!-- LEFT COLUMN: COPY + STATS -->
         <div class="hero__copy reveal" style="--i:0">
+          <!-- class="reveal" starts this div hidden (opacity:0, shifted down).
+               JavaScript's IntersectionObserver watches it; when it enters the
+               viewport it adds "is-visible" which triggers the CSS fade-in/slide-up.
+               style="--i:0" sets a CSS custom property used for the stagger delay:
+               delay = --i * 90ms. So --i:0 = no delay, --i:1 = 90ms, etc. -->
+
+          <!-- PILL BADGE -->
           <p class="pill">
+            <!-- A rounded pill-shaped label that sits above the headline. -->
             <span class="dot"></span>
+            <!-- A small glowing circle — gradient purple-to-cyan with a glow shadow. -->
             Ops + Dev • Systems Thinking • Automation
           </p>
+
+          <!-- MAIN HEADLINE -->
           <h1>
+            <!-- <h1> = Heading level 1. There should only be ONE per page.
+                 It's the most important text for SEO and accessibility.
+                 font-size uses clamp(34px, 4vw, 54px):
+                   - never smaller than 34px
+                   - scales with viewport width (4vw)
+                   - never larger than 54px -->
             Build <span class="glow">beautiful systems</span> that remove friction.
+            <!-- .glow makes the text display a purple→cyan→orange gradient.
+                 Trick: set color:transparent and use background-clip:text
+                 so the gradient shows through the transparent text color. -->
           </h1>
+
+          <!-- SUB-HEADLINE (smaller descriptive text) -->
           <p class="sub">
             A mini site to practice real-world HTML/CSS/JS: UI state, rendering, filtering,
             animations, storage, and clean design.
           </p>
 
+          <!-- CALL-TO-ACTION BUTTONS -->
           <div class="hero__buttons">
+            <!-- flex row, wraps on small screens -->
+
             <a class="btn btn--primary" href="#projects">See Projects</a>
+            <!-- An <a> tag styled to look like a button. Scrolls to #projects. -->
+
             <a class="btn btn--ghost" href="#log">Open Command Log</a>
+            <!-- Ghost variant = transparent background with a subtle border. -->
           </div>
 
+          <!-- ANIMATED STATS COUNTERS -->
           <div class="stats">
+            <!-- CSS Grid: 3 equal columns -->
+
             <div class="stat">
               <div class="stat__num" data-count="255">0</div>
+              <!-- data-count="255" is a custom HTML data attribute.
+                   JavaScript reads it and animates the number from 0 → 255
+                   when this element scrolls into view.
+                   The initial content "0" is what you see before the animation. -->
               <div class="stat__label">doors managed</div>
             </div>
+
             <div class="stat">
               <div class="stat__num" data-count="9">0</div>
               <div class="stat__label">cuatrimestres</div>
             </div>
+
             <div class="stat">
               <div class="stat__num" data-count="777">0</div>
               <div class="stat__label">hypnotic energy</div>
             </div>
           </div>
-        </div>
+        </div><!-- end .hero__copy -->
 
+
+        <!-- RIGHT COLUMN: INTERACTIVE GLASS CARD -->
         <div class="hero__card reveal" style="--i:1" aria-label="Interactive preview card">
+          <!-- aria-label describes the card to screen-readers. -->
+
           <div class="glass">
+            <!-- .glass = the card container with frosted-glass look:
+                 semi-transparent background, border, drop-shadow. -->
+
+            <!-- CARD HEADER ROW -->
             <div class="glass__top">
+              <!-- border-bottom separates this from the body below.
+                   flexbox spreads chips left, sparkline right. -->
+
+              <!-- CHIP BADGES (tag pills) -->
               <div class="chips">
                 <span class="chip">UI</span>
                 <span class="chip">State</span>
                 <span class="chip">Rules</span>
                 <span class="chip">Data</span>
+                <!-- Each chip is a small rounded monospace pill.
+                     They label what this card demonstrates. -->
               </div>
-              <div class="sparkline" id="sparkline"></div>
-            </div>
 
+              <!-- ANIMATED SHIMMER BAR -->
+              <div class="sparkline" id="sparkline"></div>
+              <!-- Looks like a mini chart placeholder.
+                   The CSS ::before pseudo-element creates a sweeping light animation
+                   that travels left-to-right on a loop, suggesting "live data." -->
+            </div><!-- end .glass__top -->
+
+            <!-- CARD BODY -->
             <div class="glass__body">
               <h3>System Pulse</h3>
-              <p class="muted">Click nodes to simulate “work flowing.”</p>
+              <p class="muted">Click nodes to simulate "work flowing."</p>
+              <!-- .muted = lower-opacity text color, for secondary/helper text -->
 
+              <!-- WORKFLOW NODE BUTTONS -->
               <div class="nodes" id="nodes">
+                <!-- CSS Grid: 3 columns of equal width.
+                     Each button represents a stage in a work pipeline.
+                     JavaScript highlights the active one with class "is-active"
+                     and shows a toast message describing that stage. -->
+
                 <button class="node" data-node="Intake">Intake</button>
+                <!-- data-node="Intake" is a custom data attribute.
+                     JavaScript reads it with btn.dataset.node to know which stage to activate. -->
                 <button class="node" data-node="Triage">Triage</button>
                 <button class="node" data-node="Assign">Assign</button>
                 <button class="node" data-node="Execute">Execute</button>
@@ -99,90 +268,164 @@
                 <button class="node" data-node="Close">Close</button>
               </div>
 
+              <!-- ACTIVE STAGE DISPLAY BAR -->
               <div class="pulse">
+                <!-- A row showing the currently-active stage name. -->
                 <div class="pulse__label">Active stage</div>
                 <div class="pulse__value" id="activeStage">Intake</div>
+                <!-- id="activeStage" lets JavaScript update the text when a node is clicked. -->
               </div>
 
+              <!-- TOAST NOTIFICATION -->
               <div class="toast" id="toast" aria-live="polite"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+              <!-- A small popup text that appears briefly then fades out.
+                   Starts invisible (opacity:0). JavaScript adds "is-show" to fade it in
+                   with a message, then removes it after ~2.4 seconds.
+                   aria-live="polite" makes screen-readers announce the message
+                   without interrupting what they were already saying. -->
+            </div><!-- end .glass__body -->
 
+          </div><!-- end .glass -->
+        </div><!-- end .hero__card -->
+
+      </div><!-- end .hero__inner container -->
+    </section><!-- end .hero -->
+
+
+    <!-- ───────────────────────────────────────────────────
+         SYSTEMS SECTION  — "feature cards" grid
+         id="systems" is the anchor target for the nav link.
+    ─────────────────────────────────────────────────────── -->
     <section class="section" id="systems">
       <div class="container">
+
+        <!-- SECTION HEADING -->
         <div class="section__head reveal" style="--i:0">
           <h2>Systems that feel inevitable</h2>
           <p class="muted">Clean cards, hover shine, and layout you can reuse in your portfolio.</p>
         </div>
 
-        <div class=”cards”>
-          <article class=”card reveal” style=”--i:0”>
-            <div class=”card__icon”>⚙️</div>
+        <!-- CARDS GRID  (4 columns on desktop, 2 on tablet, 1 on mobile) -->
+        <div class="cards">
+
+          <article class="card reveal" style="--i:0">
+            <!-- <article> = a self-contained piece of content (like a card or blog post).
+                 .card = the shared card styles: border, rounded corners, padding, shadow.
+                 .reveal + style="--i:0" = fade-in animation when scrolled into view. -->
+
+            <div class="card__icon">⚙️</div>
+            <!-- A 48×48 rounded square with a diagonal purple-to-cyan gradient background.
+                 Holds the emoji icon centered using CSS Grid place-items:center. -->
+
             <h3>Workflow clarity</h3>
-            <p>RACI-ready flows with “if/then” logic and visible ownership.</p>
+            <p>RACI-ready flows with "if/then" logic and visible ownership.</p>
+            <!-- On hover, this whole card:
+                 1. Lifts up (translateY -6px) and scales slightly
+                 2. Gets a glowing border in cyan
+                 3. Shows a radial glow that follows your mouse (tracked by JS) -->
           </article>
 
-          <article class=”card reveal” style=”--i:1”>
-            <div class=”card__icon”>🧠</div>
+          <article class="card reveal" style="--i:1">
+            <div class="card__icon">🧠</div>
             <h3>Knowledge base</h3>
             <p>SOPs that are searchable, modular, and easy to train against.</p>
           </article>
 
-          <article class=”card reveal” style=”--i:2”>
-            <div class=”card__icon”>✨</div>
+          <article class="card reveal" style="--i:2">
+            <div class="card__icon">✨</div>
             <h3>Delightful UI</h3>
             <p>Animations that are subtle, purposeful, and fast.</p>
           </article>
 
-          <article class=”card reveal” style=”--i:3”>
-            <div class=”card__icon”>📈</div>
+          <article class="card reveal" style="--i:3">
+            <div class="card__icon">📈</div>
             <h3>Metrics & proof</h3>
             <p>Track outcomes, show receipts, and build trust with data.</p>
           </article>
-        </div>
-      </div>
+
+        </div><!-- end .cards -->
+      </div><!-- end .container -->
     </section>
 
+
+    <!-- ───────────────────────────────────────────────────
+         PROJECTS SECTION  — dynamically rendered from JS data
+         id="projects" is the anchor for nav + CTA button.
+    ─────────────────────────────────────────────────────── -->
     <section class="section" id="projects">
       <div class="container">
+
+        <!-- SECTION HEADING + FILTER BUTTONS (side by side on desktop) -->
         <div class="section__head split reveal" style="--i:0">
+          <!-- .split adds flexbox so heading sits left and filters sit right.
+               They wrap to separate rows on small screens (flex-wrap:wrap). -->
+
           <div>
             <h2>Projects</h2>
             <p class="muted">Rendered from JS. Filter by tags. Add your own cards easily.</p>
           </div>
 
+          <!-- FILTER BUTTONS -->
           <div class="filters">
+            <!-- These buttons filter the project grid by tag.
+                 JavaScript handles the click events and re-renders the grid.
+                 data-filter="all|ops|automation|frontend" tells JS which tag to filter. -->
+
             <button class="filter is-active" data-filter="all">All</button>
+            <!-- is-active = gradient highlight background (the default selected filter) -->
+
             <button class="filter" data-filter="ops">Ops</button>
             <button class="filter" data-filter="automation">Automation</button>
             <button class="filter" data-filter="frontend">Frontend</button>
           </div>
-        </div>
+        </div><!-- end .section__head -->
 
+        <!-- PROJECT CARDS CONTAINER  (3 columns → 2 → 1 on smaller screens) -->
         <div class="projectGrid reveal" style="--i:1" id="projectGrid" aria-live="polite"></div>
+        <!-- This div starts EMPTY. JavaScript's renderProjects() fills it with
+             HTML cards built from the state.projects array in app.js.
+             aria-live="polite" tells screen-readers to announce content changes
+             (like when filters are applied) without interrupting speech. -->
+
       </div>
     </section>
 
+
+    <!-- ───────────────────────────────────────────────────
+         COMMAND LOG SECTION  — journaling widget
+         Saves entries to localStorage so they persist across page refreshes.
+         id="log" is the nav anchor.
+    ─────────────────────────────────────────────────────── -->
     <section class="section" id="log">
       <div class="container">
+
         <div class="section__head reveal" style="--i:0">
           <h2>Command Log</h2>
           <p class="muted">A tiny journaling widget with localStorage + export.</p>
         </div>
 
+        <!-- LOG LAYOUT: 2 columns side-by-side (form left, entries list right) -->
         <div class="log reveal" style="--i:1">
+
+          <!-- LOG FORM (left column) -->
           <form class="log__form" id="logForm">
+            <!-- <form> groups inputs. id="logForm" lets JavaScript attach a submit handler.
+                 When submitted, JS prevents page reload, reads the fields, and saves to storage. -->
+
+            <!-- Each <label> wraps its text + input together.
+                 This makes the text clickable — clicking the label focuses the input.
+                 .field uses flexbox column layout to stack label text above the input. -->
+
             <label class="field">
               <span>Top priority</span>
               <input id="priority" type="text" placeholder="What must be true by end of day?" maxlength="80" />
+              <!-- placeholder = grey hint text shown when the field is empty.
+                   maxlength="80" prevents typing more than 80 characters. -->
             </label>
 
             <label class="field">
               <span>Biggest challenge</span>
-              <input id="challenge" type="text" placeholder="What’s blocking momentum?" maxlength="80" />
+              <input id="challenge" type="text" placeholder="What's blocking momentum?" maxlength="80" />
             </label>
 
             <label class="field">
@@ -195,27 +438,49 @@
               <input id="served" type="text" placeholder="Client, family, team..." maxlength="80" />
             </label>
 
+            <!-- ACTION BUTTONS ROW -->
             <div class="log__actions">
               <button class="btn btn--primary" type="submit">Save entry</button>
-              <button class="btn btn--ghost" id="exportBtn" type="button">Export JSON</button>
-              <button class="btn btn--danger" id="clearBtn" type="button">Clear</button>
-            </div>
-          </form>
+              <!-- type="submit" triggers the form's submit event when clicked. -->
 
+              <button class="btn btn--ghost" id="exportBtn" type="button">Export JSON</button>
+              <!-- Downloads all saved entries as a .json file.
+                   type="button" prevents it from submitting the form. -->
+
+              <button class="btn btn--danger" id="clearBtn" type="button">Clear</button>
+              <!-- btn--danger = red-tinted style to warn it's destructive.
+                   Shows a confirmation dialog before deleting all entries. -->
+            </div>
+          </form><!-- end .log__form -->
+
+          <!-- ENTRIES LIST (right column) -->
           <div class="log__list">
             <div class="log__listHead">
               <h3>Recent entries</h3>
               <span class="muted" id="entryCount">0 entries</span>
+              <!-- JavaScript updates this count whenever entries change. -->
             </div>
             <div id="entries"></div>
+            <!-- This div starts empty. JavaScript fills it with saved log entries,
+                 shown in reverse order (newest first). Each entry shows its ID,
+                 timestamp, and the values you filled in the form. -->
           </div>
-        </div>
+
+        </div><!-- end .log -->
       </div>
     </section>
 
+
+    <!-- ───────────────────────────────────────────────────
+         CONTACT SECTION  — placeholder UI for a future form
+         id="contact" is the nav anchor.
+    ─────────────────────────────────────────────────────── -->
     <section class="section" id="contact">
       <div class="container">
+
+        <!-- CONTACT LAYOUT: 2 columns (description left, box right) -->
         <div class="contact reveal" style="--i:0">
+
           <div>
             <h2>Contact</h2>
             <p class="muted">
@@ -223,26 +488,53 @@
             </p>
           </div>
 
+          <!-- CONTACT BOX (right column) -->
           <div class="contact__box">
             <label class="field">
               <span>Email</span>
               <input id="email" type="email" placeholder="you@example.com" />
+              <!-- type="email" enables the browser's built-in email validation
+                   and shows the correct keyboard on mobile devices. -->
             </label>
+
             <button class="btn btn--primary" id="fakeSubmit" type="button">Send</button>
-            <p class="tiny muted">No backend yet — we’re just practicing UI + state.</p>
+            <!-- "Fake" submit — no real backend. JavaScript shows a toast with
+                 a confirmation message and clears the email field. -->
+
+            <p class="tiny muted">No backend yet — we're just practicing UI + state.</p>
+            <!-- .tiny = 12px font size. .muted = low-opacity color. -->
           </div>
-        </div>
+
+        </div><!-- end .contact -->
       </div>
     </section>
 
+
+    <!-- ───────────────────────────────────────────────────
+         FOOTER
+    ─────────────────────────────────────────────────────── -->
     <footer class="footer">
+      <!-- <footer> is a semantic landmark — screen-readers can jump to it. -->
+
       <div class="container footer__inner">
+        <!-- flexbox row with space-between: copyright on left, "back to top" on right -->
+
         <p class="muted">© <span id="year"></span> Hypnotic Ops • Built for practice</p>
+        <!-- id="year" is empty here. JavaScript fills it with the current year
+             (e.g. 2026) on page load so you never have to manually update it. -->
+
         <a class="muted" href="#top">Back to top ↑</a>
+        <!-- href="#top" scrolls back to the <header id="top"> element. -->
       </div>
     </footer>
-  </main>
+
+  </main><!-- end <main> -->
 
   <script src="./app.js"></script>
+  <!-- Loads the JavaScript file. Placed at the BOTTOM of <body> (not in <head>)
+       so all the HTML elements exist before the script tries to find them.
+       If you put it in <head>, the JS would run before the divs/buttons existed
+       and all the querySelector calls would return null. -->
+
 </body>
 </html>

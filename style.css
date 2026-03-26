@@ -126,319 +126,396 @@ a{ color: inherit; text-decoration: none; }
   animation-delay: -2.5s;              /* Offset the float cycle so orb-b bobs out of phase with orb-a */
 }
 
+/* ─── @keyframes float ───────────────────────────────────────────────────── */
+/* The orbs gently bob up and down, and breathe slightly in size */
 @keyframes float{
-  0%,100%{ transform: translate3d(0,0,0) scale(1); }
-  50%{ transform: translate3d(0,-18px,0) scale(1.02); }
+  0%,100%{ transform: translate3d(0,0,0) scale(1); }      /* Rest position — no movement, normal size */
+  50%{ transform: translate3d(0,-18px,0) scale(1.02); }   /* Midpoint — risen 18px and 2% larger */
 }
 
+/* ─── Sticky Header ──────────────────────────────────────────────────────── */
+/* The top navigation bar that sticks to the top of the screen while scrolling */
 .header{
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  backdrop-filter: blur(14px);
-  background: color-mix(in oklab, var(--bg) 70%, transparent);
-  border-bottom: 1px solid var(--stroke);
+  position: sticky;                     /* Stays fixed at the top as the user scrolls down */
+  top: 0;                               /* Anchored to the very top of the viewport */
+  z-index: 30;                          /* Sits above page content but below modals/overlays */
+  backdrop-filter: blur(14px);          /* Blurs whatever is behind the header — frosted-glass effect */
+  background: color-mix(in oklab, var(--bg) 70%, transparent); /* 70% opaque background so blur shows through */
+  border-bottom: 1px solid var(--stroke); /* Thin dividing line between header and page content */
 }
+/* Inner flex row that holds the logo, nav links, and action buttons */
 .header__inner{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 0;
-  gap: 16px;
+  display: flex;                        /* Lays children out in a horizontal row */
+  align-items: center;                  /* Vertically centres all children in the row */
+  justify-content: space-between;       /* Pushes logo to the left and actions to the right */
+  padding: 14px 0;                      /* Vertical breathing room above and below the row */
+  gap: 16px;                            /* Space between the logo, nav, and actions groups */
 }
+/* ─── Brand / Logo ───────────────────────────────────────────────────────── */
 .brand{
-  display:flex;
-  align-items:center;
-  gap: 12px;
-  font-weight: 700;
+  display:flex;                         /* Logo mark and text sit side-by-side */
+  align-items:center;                   /* Vertically centres the mark and text */
+  gap: 12px;                            /* Space between the icon badge and the brand name */
+  font-weight: 700;                     /* Bold text for the brand name */
 }
+/* The small monospace badge/icon that sits to the left of the brand name */
 .brand__mark{
-  font-family: var(--mono);
-  font-size: 13px;
-  letter-spacing: .12em;
-  padding: 8px 10px;
-  border: 1px solid var(--stroke);
-  border-radius: 999px;
-  background: var(--panel);
+  font-family: var(--mono);             /* Monospace font gives it a code/tech look */
+  font-size: 13px;                      /* Compact size for the badge */
+  letter-spacing: .12em;               /* Wide letter spacing for a label-like feel */
+  padding: 8px 10px;                    /* Inner space around the text inside the pill */
+  border: 1px solid var(--stroke);      /* Subtle border outlines the pill shape */
+  border-radius: 999px;                 /* Very large radius = fully rounded pill */
+  background: var(--panel);             /* Faint fill so it reads as a chip/badge */
 }
+/* The brand name text next to the mark */
 .brand__text{
-  opacity: .92;
+  opacity: .92;                         /* Very slightly dimmed — softer than pure white/black */
 }
 
+/* ─── Navigation Links ───────────────────────────────────────────────────── */
+/* Hidden on mobile by default; shown on wider screens via a media query lower in the file */
 .nav{
-  display: none;
-  gap: 14px;
+  display: none;                        /* Hidden until the viewport is wide enough */
+  gap: 14px;                            /* Space between each nav link when visible */
 }
+/* Individual navigation link style */
 .nav__link{
-  font-size: 14px;
-  opacity: .78;
-  padding: 8px 10px;
-  border-radius: 999px;
-  border: 1px solid transparent;
+  font-size: 14px;                      /* Slightly smaller than body text */
+  opacity: .78;                         /* Dimmed at rest so the active/hovered link stands out */
+  padding: 8px 10px;                    /* Comfortable click target with padding */
+  border-radius: 999px;                 /* Pill shape to match the brand mark */
+  border: 1px solid transparent;        /* Invisible border reserves space so hover doesn't cause layout shift */
 }
+/* Hovered nav link becomes fully opaque and shows a faint panel background */
 .nav__link:hover{
-  opacity: 1;
-  border-color: var(--stroke);
-  background: var(--panel);
+  opacity: 1;                           /* Full brightness on hover */
+  border-color: var(--stroke);          /* Border becomes visible — outlines the pill */
+  background: var(--panel);             /* Subtle fill appears on hover */
 }
+/* The currently active page link gets a purple-to-cyan gradient fill */
 .nav__link.is-active{
-  opacity: 1;
-  border-color: var(--stroke);
+  opacity: 1;                           /* Always fully visible */
+  border-color: var(--stroke);          /* Outlined pill border */
+  /* Gradient: 24% purple blending into 24% cyan — tinted, not solid */
   background: linear-gradient(90deg, color-mix(in oklab, var(--a) 24%, transparent), color-mix(in oklab, var(--b) 24%, transparent));
 }
 
+/* The right-hand cluster of action buttons in the header */
 .header__actions{
-  display:flex;
-  align-items:center;
-  gap: 10px;
+  display:flex;                         /* Buttons sit in a horizontal row */
+  align-items:center;                   /* Vertically centred */
+  gap: 10px;                            /* Space between each button */
 }
 
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+/* Base styles shared by all .btn variants */
 .btn{
-  border: 1px solid var(--stroke);
-  background: var(--panel);
-  color: var(--text);
-  padding: 10px 14px;
-  border-radius: 999px;
-  cursor: pointer;
-  font-weight: 650;
-  letter-spacing: .01em;
+  border: 1px solid var(--stroke);      /* Thin outlined border using the global stroke colour */
+  background: var(--panel);             /* Faint panel fill */
+  color: var(--text);                   /* Text inherits the main text colour */
+  padding: 10px 14px;                   /* Comfortable tap/click target */
+  border-radius: 999px;                 /* Fully rounded pill shape */
+  cursor: pointer;                      /* Shows a hand cursor on hover */
+  font-weight: 650;                     /* Between medium (500) and bold (700) */
+  letter-spacing: .01em;               /* Very slight tracking for readability */
+  /* Smooth transitions for transform, background, border, and opacity on interaction */
   transition: transform .15s ease, background .15s ease, border-color .15s ease, opacity .15s ease;
 }
+/* Hovered button lifts slightly and gets a brighter background */
 .btn:hover{
-  transform: translateY(-1px);
-  background: var(--panel2);
+  transform: translateY(-1px);          /* Rises 1px — a subtle "lift" effect */
+  background: var(--panel2);            /* Slightly brighter fill on hover */
 }
+/* Pressed button snaps back down and scales very slightly smaller */
 .btn:active{
-  transform: translateY(0px) scale(.99);
+  transform: translateY(0px) scale(.99); /* Returns to baseline, tiny squeeze to feel "clicked" */
 }
+/* Primary call-to-action button — purple-to-cyan gradient fill */
 .btn--primary{
+  /* Border blends 45% purple into the existing stroke colour */
   border-color: color-mix(in oklab, var(--a) 45%, var(--stroke));
+  /* Background is a purple-to-cyan gradient at 65% and 55% opacity respectively */
   background: linear-gradient(90deg, color-mix(in oklab, var(--a) 65%, transparent), color-mix(in oklab, var(--b) 55%, transparent));
 }
+/* Ghost button — completely transparent, no fill */
 .btn--ghost{
-  background: transparent;
+  background: transparent;              /* No fill; only text and border (if any) are visible */
 }
+/* Danger button — red tinted border and background for destructive actions */
 .btn--danger{
+  /* Border is 55% red blended into the stroke colour */
   border-color: color-mix(in oklab, #ef4444 55%, var(--stroke));
+  /* Background is a very faint 18% red wash */
   background: color-mix(in oklab, #ef4444 18%, transparent);
 }
 
+/* ─── Hero Section ───────────────────────────────────────────────────────── */
+/* The large introductory section at the top of the page */
 .hero{
-  padding: 56px 0 28px;
+  padding: 56px 0 28px;                 /* 56px space above the hero content, 28px below */
 }
+/* Two-column grid: left column (copy) is slightly wider than right column (card) */
 .hero__inner{
-  display: grid;
-  grid-template-columns: 1.15fr .85fr;
-  gap: 26px;
-  align-items: start;
+  display: grid;                        /* CSS Grid layout */
+  grid-template-columns: 1.15fr .85fr;  /* Left col takes 57.5%, right col takes 42.5% */
+  gap: 26px;                            /* Gutter between the two columns */
+  align-items: start;                   /* Columns align to their top edges, not stretched */
 }
+/* Small rounded label/badge that sits above the headline (e.g. "v2.0 — New release") */
 .pill{
-  display:inline-flex;
-  align-items:center;
-  gap: 10px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--stroke);
-  background: var(--panel);
-  width: fit-content;
-  font-size: 13px;
-  opacity: .92;
+  display:inline-flex;                  /* Shrinks to fit its content */
+  align-items:center;                   /* Icon and text vertically centred */
+  gap: 10px;                            /* Space between the dot icon and the label text */
+  padding: 8px 12px;                    /* Inner padding for the pill */
+  border-radius: 999px;                 /* Fully rounded ends */
+  border: 1px solid var(--stroke);      /* Outlined border */
+  background: var(--panel);             /* Faint fill */
+  width: fit-content;                   /* Pill is only as wide as its content */
+  font-size: 13px;                      /* Small label text */
+  opacity: .92;                         /* Slightly softened */
 }
+/* The small glowing circle icon inside the pill */
 .dot{
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: linear-gradient(90deg, var(--a), var(--b));
-  box-shadow: 0 0 18px color-mix(in oklab, var(--b) 60%, transparent);
+  width: 8px; height: 8px;              /* Tiny 8×8px circle */
+  border-radius: 50%;                   /* Makes it perfectly round */
+  background: linear-gradient(90deg, var(--a), var(--b)); /* Purple-to-cyan gradient fill */
+  box-shadow: 0 0 18px color-mix(in oklab, var(--b) 60%, transparent); /* Cyan glow radiating outward */
 }
+/* Main page headline — h1 */
 h1{
-  margin: 16px 0 10px;
-  font-size: clamp(34px, 4vw, 54px);
-  line-height: 1.05;
-  letter-spacing: -.02em;
+  margin: 16px 0 10px;                  /* Space above (from pill) and below (to subtitle) */
+  font-size: clamp(34px, 4vw, 54px);    /* Fluid size: min 34px, scales with viewport, max 54px */
+  line-height: 1.05;                    /* Very tight line-height for large display text */
+  letter-spacing: -.02em;              /* Slightly condensed — common for large headings */
 }
+/* Gradient text effect applied to a span inside the headline */
 .glow{
-  background: linear-gradient(90deg, var(--a), var(--b), var(--c));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 20px color-mix(in oklab, var(--a) 35%, transparent);
+  background: linear-gradient(90deg, var(--a), var(--b), var(--c)); /* Purple → cyan → orange gradient */
+  -webkit-background-clip: text;        /* Safari: clips the background to the text shape */
+  background-clip: text;               /* Standard: same clip */
+  color: transparent;                   /* Hides the text colour so the clipped gradient shows through */
+  text-shadow: 0 0 20px color-mix(in oklab, var(--a) 35%, transparent); /* Soft purple glow around the text */
 }
+/* Subtitle / subheading paragraph below the h1 */
 .sub{
-  margin: 0 0 18px;
-  color: var(--muted);
-  font-size: 15.5px;
-  line-height: 1.55;
-  max-width: 56ch;
+  margin: 0 0 18px;                     /* No top margin, 18px below before the buttons */
+  color: var(--muted);                  /* Uses the dimmer text colour — secondary information */
+  font-size: 15.5px;                    /* Slightly larger than base for comfortable reading */
+  line-height: 1.55;                    /* Generous line-height for multi-line paragraphs */
+  max-width: 56ch;                      /* Limits the line length to ~56 characters — optimal readability */
 }
 
+/* Row of CTA buttons below the subtitle */
 .hero__buttons{
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 18px;
+  display:flex;                         /* Buttons sit in a horizontal row */
+  gap: 10px;                            /* Space between each button */
+  flex-wrap: wrap;                      /* Wraps to a second line on narrow screens */
+  margin-bottom: 18px;                  /* Space below the buttons before the stats row */
 }
 
+/* ─── Stats Row ──────────────────────────────────────────────────────────── */
+/* Three equal-width stat boxes displayed in a row */
 .stats{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 10px;
+  display:grid;                         /* CSS Grid */
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* Three equal columns that can shrink to zero */
+  gap: 12px;                            /* Gutter between stat boxes */
+  margin-top: 10px;                     /* Space above the stats row */
 }
+/* Individual stat box */
 .stat{
-  border: 1px solid var(--stroke);
-  background: var(--panel);
-  border-radius: var(--radius);
-  padding: 12px 12px;
+  border: 1px solid var(--stroke);      /* Thin outlined border */
+  background: var(--panel);             /* Faint fill */
+  border-radius: var(--radius);         /* Rounded corners using the smaller radius token (18px) */
+  padding: 12px 12px;                   /* Equal padding on all sides */
 }
+/* The large number inside a stat box (e.g. "4.2k") */
 .stat__num{
-  font-family: var(--mono);
-  font-weight: 800;
-  font-size: 22px;
+  font-family: var(--mono);             /* Monospace font — numbers align cleanly */
+  font-weight: 800;                     /* Extra-bold for visual impact */
+  font-size: 22px;                      /* Large enough to be a clear focal point */
 }
+/* The small label below the number (e.g. "Stars") */
 .stat__label{
-  margin-top: 4px;
-  font-size: 12px;
-  color: var(--muted);
+  margin-top: 4px;                      /* Small gap between number and label */
+  font-size: 12px;                      /* Compact secondary text */
+  color: var(--muted);                  /* Dimmer colour — supporting information */
 }
 
+/* ─── Hero Card / Glass Panel ────────────────────────────────────────────── */
+/* The decorative glass-morphism card shown in the right column of the hero */
 .hero__card .glass{
-  border-radius: var(--radius2);
-  border: 1px solid var(--stroke);
+  border-radius: var(--radius2);        /* Large rounded corners (26px) */
+  border: 1px solid var(--stroke);      /* Thin outlined border */
+  /* Gradient from slightly more opaque panel at the top to slightly more at the bottom */
   background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), color-mix(in oklab, var(--panel2) 90%, transparent));
-  box-shadow: var(--shadow);
-  overflow: hidden;
+  box-shadow: var(--shadow);            /* Large deep shadow for strong sense of depth */
+  overflow: hidden;                     /* Clips child elements to the card's rounded corners */
 }
+/* Top bar of the glass card — contains chips and a sparkline */
 .glass__top{
-  padding: 16px 16px 10px;
-  border-bottom: 1px solid var(--stroke);
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  gap: 10px;
+  padding: 16px 16px 10px;              /* More padding top/sides, slightly less at the bottom */
+  border-bottom: 1px solid var(--stroke); /* Dividing line separating the top bar from the body */
+  display:flex;                         /* Horizontal layout */
+  align-items:center;                   /* Vertically centred */
+  justify-content: space-between;       /* Chips pushed left, sparkline pushed right */
+  gap: 10px;                            /* Minimum space between the two groups */
 }
+/* Container for a group of chip/tag badges */
 .chips{
-  display:flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display:flex;                         /* Chips sit in a row */
+  flex-wrap: wrap;                      /* Wraps to next line if they overflow */
+  gap: 8px;                             /* Space between each chip */
 }
+/* Individual chip/tag badge (e.g. a language or tech label) */
 .chip{
-  font-size: 12px;
-  padding: 6px 10px;
-  border: 1px solid var(--stroke);
-  background: color-mix(in oklab, var(--panel2) 65%, transparent);
-  border-radius: 999px;
-  font-family: var(--mono);
+  font-size: 12px;                      /* Small label text */
+  padding: 6px 10px;                    /* Compact inner padding */
+  border: 1px solid var(--stroke);      /* Thin border */
+  background: color-mix(in oklab, var(--panel2) 65%, transparent); /* Semi-transparent panel fill */
+  border-radius: 999px;                 /* Pill shape */
+  font-family: var(--mono);             /* Monospace font — suits tech/code labels */
 }
+/* A fake "mini chart" bar that animates a light sweep to imply live data */
 .sparkline{
-  width: 132px;
-  height: 28px;
-  border-radius: 999px;
-  border: 1px solid var(--stroke);
-  background: color-mix(in oklab, var(--panel) 80%, transparent);
-  position: relative;
-  overflow: hidden;
+  width: 132px;                         /* Fixed width — looks like a small chart widget */
+  height: 28px;                         /* Short bar height */
+  border-radius: 999px;                 /* Pill-shaped container */
+  border: 1px solid var(--stroke);      /* Outlined border */
+  background: color-mix(in oklab, var(--panel) 80%, transparent); /* Faint fill */
+  position: relative;                   /* Needed so the ::before pseudo-element can be positioned inside */
+  overflow: hidden;                     /* Clips the sweeping animation to the pill shape */
 }
+/* The animated light sweep that travels across the sparkline */
 .sparkline::before{
-  content:"";
-  position:absolute;
-  inset: 0;
+  content:"";                           /* Required to render a pseudo-element with no text */
+  position:absolute;                    /* Positioned inside .sparkline */
+  inset: 0;                             /* Fills the entire sparkline area */
+  /* Gradient: transparent → faint cyan → transparent — creates a moving "shine" */
   background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--b) 35%, transparent), transparent);
-  transform: translateX(-60%);
-  animation: sweep 2.1s ease-in-out infinite;
+  transform: translateX(-60%);          /* Starts hidden to the left */
+  animation: sweep 2.1s ease-in-out infinite; /* Runs the sweep animation on a loop */
 }
+/* ─── @keyframes sweep ───────────────────────────────────────────────────── */
+/* Moves the shine from left to right across the sparkline */
 @keyframes sweep{
-  0%{ transform: translateX(-60%); }
-  50%{ transform: translateX(60%); }
-  100%{ transform: translateX(60%); }
+  0%{ transform: translateX(-60%); }   /* Off-screen to the left */
+  50%{ transform: translateX(60%); }   /* Off-screen to the right (crossed through) */
+  100%{ transform: translateX(60%); }  /* Holds right position momentarily before looping */
 }
 
+/* Body area of the glass card — main content below the top bar */
 .glass__body{
-  padding: 16px;
+  padding: 16px;                        /* Consistent padding around the body content */
 }
+/* h3 inside the glass body has tight vertical margins */
 .glass__body h3{
-  margin: 6px 0 6px;
+  margin: 6px 0 6px;                    /* Small breathing room above and below the subheading */
 }
+/* Utility class — applies the muted (dim) text colour to any element */
 .muted{ color: var(--muted); }
+/* ─── Node Grid (inside the glass card) ─────────────────────────────────── */
+/* Three-column grid of interactive node buttons */
 .nodes{
-  display:grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin: 14px 0 14px;
+  display:grid;                         /* CSS Grid */
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* Three equal columns */
+  gap: 10px;                            /* Gutter between node buttons */
+  margin: 14px 0 14px;                  /* Vertical space above and below the grid */
 }
+/* Individual node button */
 .node{
-  border: 1px solid var(--stroke);
-  background: color-mix(in oklab, var(--panel) 85%, transparent);
-  color: var(--text);
-  padding: 10px 10px;
-  border-radius: 14px;
-  cursor: pointer;
+  border: 1px solid var(--stroke);      /* Thin outlined border */
+  background: color-mix(in oklab, var(--panel) 85%, transparent); /* 85% panel fill */
+  color: var(--text);                   /* Inherits the main text colour */
+  padding: 10px 10px;                   /* Equal padding on all sides */
+  border-radius: 14px;                  /* Rounded corners, slightly less than --radius */
+  cursor: pointer;                      /* Hand cursor — indicates it's clickable */
+  /* Smooth transitions for lift, background change, and border colour change */
   transition: transform .15s ease, background .15s ease, border-color .15s ease;
 }
+/* Hovered node lifts slightly and gets a brighter background */
 .node:hover{
-  transform: translateY(-1px);
-  background: color-mix(in oklab, var(--panel2) 85%, transparent);
+  transform: translateY(-1px);          /* Rises 1px */
+  background: color-mix(in oklab, var(--panel2) 85%, transparent); /* Brighter fill */
 }
+/* Selected/active node gets a cyan-tinted border and purple-to-cyan gradient fill */
 .node.is-active{
+  /* Border blends 60% cyan into the stroke colour */
   border-color: color-mix(in oklab, var(--b) 60%, var(--stroke));
+  /* Background gradient: 22% purple → 22% cyan — subtle tint, not a solid colour */
   background: linear-gradient(90deg, color-mix(in oklab, var(--a) 22%, transparent), color-mix(in oklab, var(--b) 22%, transparent));
 }
 
+/* ─── Pulse Row ──────────────────────────────────────────────────────────── */
+/* A small status row displaying a label and a live metric value side by side */
 .pulse{
-  display:flex;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid var(--stroke);
-  background: var(--panel);
-  border-radius: 16px;
-  padding: 12px;
+  display:flex;                         /* Horizontal layout */
+  align-items: center;                  /* Vertically centred */
+  justify-content: space-between;       /* Label on left, value on right */
+  border: 1px solid var(--stroke);      /* Thin outlined container */
+  background: var(--panel);             /* Faint fill */
+  border-radius: 16px;                  /* Nicely rounded corners */
+  padding: 12px;                        /* Inner padding */
 }
+/* The descriptive label on the left side of the pulse row */
 .pulse__label{
-  font-size: 12px;
-  color: var(--muted);
+  font-size: 12px;                      /* Small secondary text */
+  color: var(--muted);                  /* Dimmed colour — supporting info */
 }
+/* The metric value on the right side of the pulse row */
 .pulse__value{
-  font-family: var(--mono);
-  font-weight: 800;
+  font-family: var(--mono);             /* Monospace so numbers are fixed-width */
+  font-weight: 800;                     /* Extra-bold for visual emphasis */
 }
 
+/* ─── Toast Notification ─────────────────────────────────────────────────── */
+/* A small inline feedback message that appears after an action */
 .toast{
-  margin-top: 10px;
-  min-height: 20px;
-  font-size: 13px;
-  color: var(--muted);
-  transition: opacity .25s ease, transform .25s ease;
-  transform: translateY(4px);
-  opacity: 0;
+  margin-top: 10px;                     /* Space above the toast */
+  min-height: 20px;                     /* Reserves vertical space even when invisible, preventing layout jump */
+  font-size: 13px;                      /* Small feedback text */
+  color: var(--muted);                  /* Starts in muted colour */
+  transition: opacity .25s ease, transform .25s ease; /* Smooth fade and slide animation */
+  transform: translateY(4px);           /* Starts 4px lower — slides up when shown */
+  opacity: 0;                           /* Invisible by default */
 }
+/* When JavaScript adds .is-show, the toast fades in and slides up into position */
 .toast.is-show{
-  color: var(--text);
-  opacity: 1;
-  transform: translateY(0);
+  color: var(--text);                   /* Full brightness text when visible */
+  opacity: 1;                           /* Fully visible */
+  transform: translateY(0);             /* Rests at its natural position */
 }
 
+/* ─── Generic Section ────────────────────────────────────────────────────── */
+/* Shared wrapper for each full-width page section */
 .section{
-  padding: 54px 0;
+  padding: 54px 0;                      /* Generous vertical breathing room above and below */
 }
+/* Heading area at the top of a section */
 .section__head{
-  margin-bottom: 16px;
+  margin-bottom: 16px;                  /* Space between the heading area and the section content */
 }
+/* The h2 title inside a section head */
 .section__head h2{
-  margin: 0 0 8px;
-  font-size: 28px;
-  letter-spacing: -.01em;
+  margin: 0 0 8px;                      /* No top margin, small gap below before a subtitle */
+  font-size: 28px;                      /* Prominent section title size */
+  letter-spacing: -.01em;              /* Slightly condensed for a clean, modern look */
 }
+/* Variant: section head with a title on the left and a control (e.g. filter) on the right */
 .section__head.split{
-  display:flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 14px;
-  flex-wrap: wrap;
+  display:flex;                         /* Horizontal layout */
+  align-items: flex-end;                /* Aligns items to their bottom edges */
+  justify-content: space-between;       /* Title left, control right */
+  gap: 14px;                            /* Minimum space between the two sides */
+  flex-wrap: wrap;                      /* Wraps to a second line on narrow screens */
 }
 
+/* ─── Feature Cards Grid ─────────────────────────────────────────────────── */
+/* Four-column grid for the feature/capability cards */
 .cards{
-  display:grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  display:grid;                         /* CSS Grid */
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* Four equal columns that can shrink to zero */
+  gap: 14px;                            /* Gutter between cards */
 }
 .card,
 .project,

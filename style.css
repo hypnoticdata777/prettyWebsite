@@ -1,102 +1,129 @@
+/* ─── Design Tokens (CSS Custom Properties) ─────────────────────────────── */
+/* :root defines global CSS variables available everywhere on the page */
 :root{
-  --bg: #070A12;
-  --panel: rgba(255,255,255,.06);
-  --panel2: rgba(255,255,255,.08);
-  --text: rgba(255,255,255,.92);
-  --muted: rgba(255,255,255,.68);
-  --stroke: rgba(255,255,255,.14);
-  --shadow: 0 30px 80px rgba(0,0,0,.45);
-  --radius: 18px;
-  --radius2: 26px;
-  --max: 1120px;
+  --bg: #070A12;                        /* Page background — a very dark navy, almost black */
+  --panel: rgba(255,255,255,.06);       /* Subtle white at 6% opacity — used for card/panel fills */
+  --panel2: rgba(255,255,255,.08);      /* Slightly brighter panel variant for hover states */
+  --text: rgba(255,255,255,.92);        /* Main body text — white at 92% opacity (not pure white, softer) */
+  --muted: rgba(255,255,255,.68);       /* Secondary / helper text — dimmer white at 68% opacity */
+  --stroke: rgba(255,255,255,.14);      /* Border colour — faint white line used on cards and dividers */
+  --shadow: 0 30px 80px rgba(0,0,0,.45); /* Drop shadow — large, soft black shadow for depth */
+  --radius: 18px;                       /* Standard border-radius for smaller components */
+  --radius2: 26px;                      /* Larger border-radius for cards and big containers */
+  --max: 1120px;                        /* Maximum page content width — keeps lines readable on wide screens */
 
-  --a: #7C3AED;
-  --b: #22D3EE;
-  --c: #F97316;
+  --a: #7C3AED;                         /* Accent colour A — vivid violet/purple */
+  --b: #22D3EE;                         /* Accent colour B — bright cyan */
+  --c: #F97316;                         /* Accent colour C — warm orange */
 
+  /* Monospace font stack — tries native system monospace first, then falls back down the list */
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* Sans-serif font stack — prefers the OS's own UI font so the page feels native */
   --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
 }
 
+/* ─── Light-mode overrides ───────────────────────────────────────────────── */
+/* When a parent element carries data-theme="light", these values replace the dark defaults */
 [data-theme="light"]{
-  --bg: #F7F7FB;
-  --panel: rgba(0,0,0,.04);
-  --panel2: rgba(0,0,0,.06);
-  --text: rgba(0,0,0,.88);
-  --muted: rgba(0,0,0,.62);
-  --stroke: rgba(0,0,0,.12);
-  --shadow: 0 30px 80px rgba(0,0,0,.18);
+  --bg: #F7F7FB;                        /* Light background — near-white with a cool grey tint */
+  --panel: rgba(0,0,0,.04);             /* Very light dark wash at 4% — subtle panel tint on white */
+  --panel2: rgba(0,0,0,.06);            /* Slightly darker panel variant for hover on light backgrounds */
+  --text: rgba(0,0,0,.88);             /* Dark text — black at 88% opacity, not pure black (easier on eyes) */
+  --muted: rgba(0,0,0,.62);            /* Muted dark text at 62% opacity for secondary labels */
+  --stroke: rgba(0,0,0,.12);           /* Light-mode border — dark at 12% opacity, a soft grey line */
+  --shadow: 0 30px 80px rgba(0,0,0,.18); /* Lighter shadow for light mode — less contrast needed */
 }
 
+/* ─── Global Reset & Base Styles ─────────────────────────────────────────── */
+/* Every element includes padding and border inside its declared width/height */
 *{ box-sizing: border-box; }
+/* Both html and body fill the full viewport height — needed for full-height layouts */
 html,body{ height: 100%; }
 body{
-  margin: 0;
-  font-family: var(--sans);
-  color: var(--text);
-  background: var(--bg);
-  overflow-x: hidden;
+  margin: 0;                            /* Remove the browser's default 8px body margin */
+  font-family: var(--sans);             /* Apply the sans-serif font stack defined above */
+  color: var(--text);                   /* Set default text colour to the --text token */
+  background: var(--bg);               /* Fill the page with the --bg colour */
+  overflow-x: hidden;                  /* Hide any accidental horizontal overflow (prevents side-scroll) */
 }
 
+/* Links inherit the surrounding text colour and have no underline by default */
 a{ color: inherit; text-decoration: none; }
 
+/* ─── Layout Container ───────────────────────────────────────────────────── */
 .container{
+  /* Width is whichever is smaller: --max (1120px) or the viewport minus 40px padding */
   width: min(var(--max), calc(100% - 40px));
-  margin: 0 auto;
+  margin: 0 auto;                       /* Centre the container horizontally on the page */
 }
 
+/* ─── Decorative Background Layer ───────────────────────────────────────── */
+/* .bg is the fixed full-screen backdrop that sits behind all page content */
 .bg{
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  overflow: hidden;
+  position: fixed;                      /* Stays in place while the user scrolls */
+  inset: 0;                             /* Shorthand for top/right/bottom/left: 0 — fills the viewport */
+  z-index: -2;                          /* Sits behind everything else (negative stacking order) */
+  overflow: hidden;                     /* Clips any child elements that extend beyond the viewport */
 }
+/* .grid draws the subtle dot/line grid pattern visible on the background */
 .grid{
-  position: absolute;
-  inset: 0;
+  position: absolute;                   /* Positioned relative to .bg */
+  inset: 0;                             /* Fills the entire .bg area */
   background:
+    /* Vertical lines: a 1px white line every 54px, then transparent gap */
     linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+    /* Horizontal lines: same trick going downward */
     linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-  background-size: 54px 54px;
-  opacity: .18;
-  transform: translateZ(0);
+  background-size: 54px 54px;           /* Each grid cell is 54×54 px */
+  opacity: .18;                         /* Very faint — just a hint of structure, not distracting */
+  transform: translateZ(0);             /* Forces GPU compositing layer for smooth rendering */
 }
+/* .grain adds an animated film-grain / noise texture over the background */
 .grain{
-  position: absolute;
-  inset: -30%;
+  position: absolute;                   /* Positioned relative to .bg */
+  inset: -30%;                          /* Extends 30% beyond the viewport on all sides so drift never shows edges */
+  /* Inline SVG data-URI that generates fractalNoise — this is the grain texture image */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
-  opacity: .12;
-  mix-blend-mode: overlay;
-  animation: drift 14s linear infinite;
+  opacity: .12;                         /* Almost invisible — just a tactile texture hint */
+  mix-blend-mode: overlay;             /* Blends with layers below using the Overlay algorithm for richness */
+  animation: drift 14s linear infinite; /* Slowly drifts using the @keyframes defined just below */
 }
 
+/* ─── @keyframes drift ───────────────────────────────────────────────────── */
+/* Animates the grain layer: it slowly translates and rotates to give a living, cinematic feel */
 @keyframes drift{
-  0%{ transform: translate3d(0,0,0) rotate(0deg); }
-  100%{ transform: translate3d(-6%, 4%,0) rotate(6deg); }
+  0%{ transform: translate3d(0,0,0) rotate(0deg); }          /* Start position — centred, no rotation */
+  100%{ transform: translate3d(-6%, 4%,0) rotate(6deg); }    /* End: shifted slightly left/down and rotated 6° */
 }
 
+/* ─── Glowing Orbs ───────────────────────────────────────────────────────── */
+/* Shared styles for the large blurred colour blobs in the background */
 .orb{
-  position: absolute;
-  width: 680px;
+  position: absolute;                   /* Positioned within .bg */
+  width: 680px;                         /* Each orb is a large 680×680px circle */
   height: 680px;
-  border-radius: 50%;
-  filter: blur(40px);
-  opacity: .55;
-  transform: translateZ(0);
-  animation: float 10s ease-in-out infinite;
+  border-radius: 50%;                   /* Turns the square div into a circle */
+  filter: blur(40px);                   /* Heavy blur makes it look like soft ambient light, not a shape */
+  opacity: .55;                         /* Semi-transparent so orbs blend with the background */
+  transform: translateZ(0);             /* GPU layer hint for smooth animation */
+  animation: float 10s ease-in-out infinite; /* Gentle bobbing animation — see @keyframes float */
 }
+/* Orb A — positioned in the top-left corner, blending purple and cyan */
 .orb-a{
-  top: -220px;
-  left: -180px;
+  top: -220px;                          /* Partially off-screen at the top */
+  left: -180px;                         /* Partially off-screen on the left */
+  /* Two overlapping radial gradients: purple bloom from top-left, cyan bloom from bottom-right */
   background: radial-gradient(circle at 30% 30%, var(--a), transparent 60%),
               radial-gradient(circle at 70% 70%, var(--b), transparent 62%);
 }
+/* Orb B — positioned in the bottom-right corner, blending orange and purple */
 .orb-b{
-  right: -240px;
-  bottom: -260px;
+  right: -240px;                        /* Partially off-screen on the right */
+  bottom: -260px;                       /* Partially off-screen at the bottom */
+  /* Two radial gradients: orange bloom top-left, purple bloom bottom-right */
   background: radial-gradient(circle at 30% 30%, var(--c), transparent 60%),
               radial-gradient(circle at 70% 70%, var(--a), transparent 62%);
-  animation-delay: -2.5s;
+  animation-delay: -2.5s;              /* Offset the float cycle so orb-b bobs out of phase with orb-a */
 }
 
 @keyframes float{

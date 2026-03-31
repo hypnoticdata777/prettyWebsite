@@ -517,37 +517,89 @@ h1{
   grid-template-columns: repeat(4, minmax(0, 1fr)); /* Four equal columns that can shrink to zero */
   gap: 14px;                            /* Gutter between cards */
 }
+/* Target multiple classes at once:
+   .card, .project, .log_form, etc.
+   This applies the same styles to ALL of them */
 .card,
 .project,
-.log__form,
-.log__list,
-.contact__box,
-.hero__card .glass,
+.log_form,
+.log_list,
+.contact_box,
+.hero_card.glass,
 .stat {
+
+  /* Background styling using a gradient */
   background:
     linear-gradient(
-      180deg,
-      color-mix(in oklab, white 4%, var(--panel)) 0%,
-      color-mix(in oklab, white 1%, var(--panel)) 100%
+      180deg, /* direction: top → bottom */
+
+      /* First color stop:
+         Mix white (4%) with the panel color (0%) */
+      color-mix(in oklab, white 4%, var(--panel) 0%),
+
+      /* Second color stop:
+         Mix white (1%) with the panel color (100%) */
+      color-mix(in oklab, white 1%, var(--panel) 100%)
     );
 }
-.card{
+
+/* Individual styling specifically for .card */
+.card {
+
+  /* Border: 1px thick, solid line, using custom variable */
   border: 1px solid var(--stroke);
+
+  /* Background color from a CSS variable */
   background: var(--panel);
-  border-radius: var(--radius2);
+
+  /* Rounded corners using variable radius */
+  border-radius: var(--radius);
+
+  /* Inner spacing: 16px padding on all sides */
   padding: 16px;
+
+  /* Allows child elements to be positioned relative to this card */
   position: relative;
+
+  /* Prevents content from overflowing outside the card */
   overflow: hidden;
+
+  /* Shadow effect:
+     0 = no horizontal offset
+     18px = vertical offset
+     60px = blur
+     rgba = black with transparency */
   box-shadow: 0 18px 60px rgba(0,0,0,.18);
 }
+
+/* Apply same behavior to both .card and .project */
 .card,
 .project {
+
+  /* Default transform:
+     translateY(0) = no vertical movement
+     scale(1) = normal size */
   transform: translateY(0) scale(1);
+
+  /* Smooth transitions for animations */
   transition:
+
+    /* Transform animation (movement/scale)
+       0.28 seconds with custom easing curve */
     transform .28s cubic-bezier(.22,1,.36,1),
+
+    /* Border color changes smoothly */
     border-color .28s ease,
+
+    /* Background changes smoothly */
     background .28s ease,
+
+    /* Shadow changes smoothly */
     box-shadow .28s ease;
+
+  /* Hint to browser:
+     “This element will animate transforms”
+     → improves performance (GPU optimization) */
   will-change: transform;
 }
 

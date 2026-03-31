@@ -603,40 +603,118 @@ h1{
   will-change: transform;
 }
 
+/* =========================
+   HOVER STATE (when mouse is over the card/project)
+   ========================= */
 .card:hover,
 .project:hover {
+
+  /* Move the element slightly UP (-6px)
+     and make it slightly bigger (1.01 = 1% larger)
+     → This creates a "lift" effect */
   transform: translateY(-6px) scale(1.01);
+
+  /* Change border color dynamically:
+     Mix your accent color (--b) at 28% with the base stroke color
+     → subtle glow / highlight on hover */
   border-color: color-mix(in oklab, var(--b) 28%, var(--stroke));
+
+  /* Multiple layered shadows for depth */
   box-shadow:
+
+    /* Main shadow (strong depth)
+       0px horizontal, 18px down, 40px blur */
     0 18px 40px rgba(0,0,0,.22),
+
+    /* Colored glow (accent tint)
+       Uses your accent variable (--a) */
     0 10px 24px color-mix(in oklab, var(--a) 10%, transparent),
+
+    /* Inner border glow (very subtle line effect) */
     0 0 0 1px color-mix(in oklab, var(--b) 12%, transparent);
 }
 
+/* =========================
+   ACTIVE STATE (when clicking / pressing)
+   ========================= */
 .card:active,
 .project:active {
+
+  /* Push element DOWN slightly and shrink it
+     → simulates a "press" like a real button */
   transform: translateY(-2px) scale(0.995);
 }
-.card::before{
-  content:"";
-  position:absolute;
+
+/* =========================
+   BEFORE PSEUDO ELEMENT (visual glow layer)
+   ========================= */
+.card::before {
+
+  /* Required for pseudo-elements to render */
+  content: "";
+
+  /* Position relative to the card */
+  position: absolute;
+
+  /* Expand OUTSIDE the card by 60px on all sides
+     → allows glow to spill outside edges */
   inset: -60px;
-  background: radial-gradient(circle at var(--x, 30%) var(--y, 20%), color-mix(in oklab, var(--b) 25%, transparent), transparent 55%);
+
+  /* Radial gradient (circular glow)
+     - Positioned at custom X/Y variables (--x, --y)
+     - These can be controlled with mouse position (advanced)
+  */
+  background:
+    radial-gradient(
+      circle at var(--x, 30%) var(--y, 20%),
+
+      /* Inner glow color (slightly visible) */
+      color-mix(in oklab, var(--b) 25%, transparent),
+
+      /* Outer area fades completely */
+      transparent 55%
+    );
+
+  /* Start invisible */
   opacity: 0;
+
+  /* Smooth fade in/out */
   transition: opacity .25s ease;
 }
-.card:hover::before{
+
+/* When hovering the card → show the glow */
+.card:hover::before {
   opacity: 1;
 }
-.card__icon {
+
+/* =========================
+   ICON CONTAINER INSIDE CARD
+   ========================= */
+.card_icon {
+
+  /* Fixed size square */
   width: 48px;
   height: 48px;
+
+  /* Use CSS Grid for centering content */
   display: grid;
+
+  /* Center icon horizontally AND vertically */
   place-items: center;
+
+  /* Icon/text size inside */
   font-size: 22px;
+
+  /* Space below the icon */
   margin-bottom: 14px;
+
+  /* Rounded corners */
   border-radius: 14px;
+
+  /* Border using variable */
   border: 1px solid var(--stroke);
+
+  /* Background styling (continues below in your code) */
   background:
     linear-gradient(
       135deg,
